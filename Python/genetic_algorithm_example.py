@@ -1,14 +1,15 @@
 import random
+import time
 
 '''
 Simple example for genetic algorithm.
 Used genetic evolution (selection and crossover) to find a string. For the given example brute force will be 27^len(answer)
 '''
 
-alphabet = "abcdefghijklmnopqrstuvwxyz "
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
 
 def get_answer():
-    return "who is the boss"
+    return "The quick brown fox jumped over the lazy dog"
 
 def is_answer(a):
     return a == get_answer()
@@ -104,7 +105,7 @@ def generation(population):
 
         ## mutation
         # Mutate on 1% or 1 letter
-        for _ in range(max(1, len(child) * 0.01)):
+        for _ in range(max(1, int(len(child) * 0.01))):
             child = mutation(child)
         children.append(child)
         #print(child)
@@ -114,7 +115,7 @@ def generation(population):
 
 
 def genetic_algorithm(chrom_size):
-    population_size = 20
+    population_size = 100
 
     # create the base population
     population = create_population(population_size, chrom_size)
@@ -140,5 +141,31 @@ def genetic_algorithm(chrom_size):
     print("\nAnswer is: "+"".join(answer))
     print("Generation count: " + str(generation_count))
 
-
+start = time.clock()
 genetic_algorithm(len(get_answer()))
+end = time.clock()
+print("Time: " + str(end-start))
+
+
+
+def test_brute_force():
+    ans=''
+    for _ in range(len(get_answer())):
+        ans = ans + 'a'
+    score = get_score(ans)
+
+    for i in range(len(ans)):
+        for c in alphabet:
+            s = ans[:i] + c + ans[i+1:]
+            t = get_score(s)
+            if  t > score:
+                score = t
+                ans = s
+                break
+        #print(ans)
+    print("\nBrute force answer: " + ans)
+
+start = time.clock()
+test_brute_force()
+end = time.clock()
+print("Time: " + str(end-start))
